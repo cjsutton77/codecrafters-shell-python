@@ -11,7 +11,12 @@ def main():
             command = input()
             if (command == EXIT_STRING):
                 break
-            print(f"{command}: command not found")
+            commArr = command.split(' ')
+            if (commArr[0] == 'echo'):
+                commArr.pop(0)
+                print(f'{' '.join(commArr)}')
+            else:
+                print(f"{command}: command not found")
 
 
 if __name__ == "__main__":
