@@ -1,8 +1,9 @@
 import sys
 
+EXIT_STRING = "exit 0"
 
 def main():
-        while True:
+        while (command != EXIT_STRING):
             # Uncomment this block to pass the first stage
             sys.stdout.write("$ ")
 
