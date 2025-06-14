@@ -5,10 +5,7 @@ EXIT_STRING = "exit 0"
 def main():
         while (True):
             PATH = os.environ.get("PATH").split(":")
-            # path = 
-            # Uncomment this block to pass the first stage
             sys.stdout.write("$ ")
-            # Wait for user input
             command = input()
             commArr = command.split(' ')
             if (command == EXIT_STRING):
@@ -18,6 +15,8 @@ def main():
                 print(f'{' '.join(commArr)}')
             elif (commArr[0] == 'type'):
                 match commArr[1]:
+                    case "pwd":
+                        print(f'{commArr[1]} is a shell builtin')
                     case "echo":
                         print(f'{commArr[1]} is a shell builtin')
                     case "exit":
@@ -26,6 +25,8 @@ def main():
                         print(f'{commArr[1]} is a shell builtin')    
                     case _:
                         finder(commArr[1],PATH,True)
+            elif (commArr[0] == 'pwd'):
+                print(os.getcwd())
             elif finder(commArr[0],PATH,False):
                 os.system(command)
             else:
@@ -50,8 +51,6 @@ def finder(command,path,output=True):
         if output: 
             print(f'{command}: not found')
         return False
-     
     
-
 if __name__ == "__main__":
     main()
