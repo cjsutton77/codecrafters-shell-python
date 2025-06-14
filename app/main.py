@@ -27,6 +27,12 @@ def main():
                         finder(commArr[1],PATH,True)
             elif (commArr[0] == 'pwd'):
                 print(os.getcwd())
+            elif (commArr[0] == 'cd'):
+                if os.path.isdir(commArr[1]):
+                    os.chdir(commArr[1])
+                else:
+                    print(f'cd: {commArr[1]}: No such file or directory')
+                    
             elif finder(commArr[0],PATH,False):
                 os.system(command)
             else:
@@ -35,8 +41,6 @@ def main():
 def finder(command,path,output=True):
     cmd_found = None
     for p in path:
-        #directoryListing = os.listdir(p)
-        #print(commArr[1],p)
         if (os.path.isdir(p) and command in os.listdir(p)):
             cmd_found = (f'{command} is {p}/{command}')
             found = True
