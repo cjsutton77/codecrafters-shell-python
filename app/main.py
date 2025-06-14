@@ -25,21 +25,33 @@ def main():
                     case "type":
                         print(f'{commArr[1]} is a shell builtin')    
                     case _:
-                        found = False
-                        for p in PATH:
-                            #directoryListing = os.listdir(p)
-                            #print(commArr[1],p)
-                            if (os.path.isdir(p) and commArr[1] in os.listdir(p)):
-                                print(f'{commArr[1]} is {p}/{commArr[1]}')
-                                found = True
-                                break
-                            else: 
-                                continue
-                        if (not found):
-                            print(f'{commArr[1]}: not found') 
+                        finder(commArr[1],PATH,True)
+            elif finder(commArr[0],PATH,False):
+                os.system(command)
             else:
                 print(f"{command}: command not found")
 
+def finder(command,path,output=True):
+    cmd_found = None
+    for p in path:
+        #directoryListing = os.listdir(p)
+        #print(commArr[1],p)
+        if (os.path.isdir(p) and command in os.listdir(p)):
+            cmd_found = (f'{command} is {p}/{command}')
+            found = True
+            break
+        else: 
+            continue
+    if cmd_found is not None:
+        if output: 
+            print(cmd_found)
+        return True
+    else:
+        if output: 
+            print(f'{command}: not found')
+        return False
+     
+    
 
 if __name__ == "__main__":
     main()
