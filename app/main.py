@@ -28,7 +28,10 @@ def main():
             elif (commArr[0] == 'pwd'):
                 print(os.getcwd())
             elif (commArr[0] == 'cd'):
-                if os.path.isdir(commArr[1]):
+                if (commArr[1] == '~'):
+                    HOME = os.environ.get("HOME")
+                    os.chdir(HOME)
+                elif os.path.isdir(commArr[1]):
                     os.chdir(commArr[1])
                 else:
                     print(f'cd: {commArr[1]}: No such file or directory')
