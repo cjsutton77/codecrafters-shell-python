@@ -1,9 +1,11 @@
 import sys
-
+import os
 EXIT_STRING = "exit 0"
 
 def main():
         while (True):
+            path = sys.path
+            # path = 
             # Uncomment this block to pass the first stage
             sys.stdout.write("$ ")
             # Wait for user input
@@ -23,6 +25,13 @@ def main():
                     case "type":
                         print(f'{commArr[1]} is a shell builtin')    
                     case _:
+                        for p in path:
+                            print(p)
+                            if (commArr[1] in p):
+                                print(f'{commArr[1]} is in {p}/{commArr[1]}')
+                                break
+                            else: 
+                                continue
                         print(f'{commArr[1]}: not found') 
             else:
                 print(f"{command}: command not found")
