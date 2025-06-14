@@ -4,7 +4,7 @@ EXIT_STRING = "exit 0"
 
 def main():
         while (True):
-            path = sys.path
+            PATH = os.environ.get("PATH").split(":")
             # path = 
             # Uncomment this block to pass the first stage
             sys.stdout.write("$ ")
@@ -25,14 +25,18 @@ def main():
                     case "type":
                         print(f'{commArr[1]} is a shell builtin')    
                     case _:
-                        for p in path:
-                            print(p)
-                            if (commArr[1] in p):
-                                print(f'{commArr[1]} is in {p}/{commArr[1]}')
+                        found = False
+                        for p in PATH:
+                            #directoryListing = os.listdir(p)
+                            #print(commArr[1],p)
+                            if (os.path.isdir(p) and commArr[1] in os.listdir(p)):
+                                print(f'{commArr[1]} is {p}/{commArr[1]}')
+                                found = True
                                 break
                             else: 
                                 continue
-                        print(f'{commArr[1]}: not found') 
+                        if (not found):
+                            print(f'{commArr[1]}: not found') 
             else:
                 print(f"{command}: command not found")
 
