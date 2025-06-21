@@ -1,52 +1,45 @@
 import sys
 import os
 import shlex
+import subprocess
 EXIT_STRING = "exit 0"
 
 def main():
-        while (True):
-            PATH = os.environ.get("PATH").split(":")
-            sys.stdout.write("$ ")
-            #command = input()
-            command = sys.stdin.readline().strip()
-            #print(command)
-            #print(command)
-            commArr = command.split(' ')
-            if (command == EXIT_STRING):
-                sys.exit(0)
-            elif (commArr[0] == 'echo'):
-                #print(commArr)
-                # Use shlex to split the command like a shell
-                args = shlex.split(command)
-                # Remove the 'echo' part
-                print(' '.join(args[1:]))
-            elif (commArr[0] == 'type'):
-                match commArr[1]:
-                    case "pwd":
-                        print(f'{commArr[1]} is a shell builtin')
-                    case "echo":
-                        print(f'{commArr[1]} is a shell builtin')
-                    case "exit":
-                        print(f'{commArr[1]} is a shell builtin')
-                    case "type":
-                        print(f'{commArr[1]} is a shell builtin')    
-                    case _:
-                        finder(commArr[1],PATH,True)
-            elif (commArr[0] == 'pwd'):
-                print(os.getcwd())
-            elif (commArr[0] == 'cd'):
-                if (commArr[1] == '~'):
-                    HOME = os.environ.get("HOME")
-                    os.chdir(HOME)
-                elif os.path.isdir(commArr[1]):
-                    os.chdir(commArr[1])
-                else:
-                    print(f'cd: {commArr[1]}: No such file or directory')
-                    
-            elif finder(commArr[0],PATH,False):
-                os.system(command)
+    while (True):
+        PATH = os.environ.get("PATH").split(":")
+        sys.stdout.write("$ ")
+        command = sys.stdin.readline().strip()
+        if not command:
+            continue
+        executor = shlex.split(command)
+        if (command == EXIT_STRING):
+            sys.exit(0)
+        elif (executor[0] == 'echo'):
+            print(' '.join(executor[1:]))
+        elif (executor[0] == 'type'):
+            match executor[1]:
+                case "pwd" | "echo" | "exit" | "type":
+                    print(f'{executor[1]} is a shell builtin')
+                case _:
+                    finder(executor[1], PATH, True)
+        elif (executor[0] == 'pwd'):
+            print(os.getcwd())
+        elif (executor[0] == 'cd'):
+            if len(executor) > 1 and executor[1] == '~':
+                HOME = os.environ.get("HOME")
+                os.chdir(HOME)
+            elif len(executor) > 1 and os.path.isdir(executor[1]):
+                os.chdir(executor[1])
             else:
-                print(f"{command}: command not found")
+                print(f'cd: {executor[1] if len(executor) > 1 else ""}: No such file or directory')
+        else:
+            # Try to run the command as an executable, even if quoted
+            try:
+                subprocess.run(executor)
+            except FileNotFoundError:
+                print(f"{executor[0]}: command not found")
+            except Exception as e:
+                print(f"Error: {e}")
 
 def finder(command,path,output=True):
     cmd_found = None
