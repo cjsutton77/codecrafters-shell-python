@@ -1,5 +1,6 @@
 import sys
 import os
+import shlex
 EXIT_STRING = "exit 0"
 
 def main():
@@ -14,23 +15,11 @@ def main():
             if (command == EXIT_STRING):
                 sys.exit(0)
             elif (commArr[0] == 'echo'):
-                if (command.count("\'") == 2):
-                    echoSplit = command.split("\'")
-                    print(echoSplit[1])
-                elif (command.count('\'') > 2):
-                    #print('hi')
-                    #print(command)
-                    echoSplit = command.split("\'")
-                    while('' in echoSplit):
-                        echoSplit.remove('')
-                    #print(echoSplit)
-                    echoSplit.pop(0)
-                    print(f'{''.join(echoSplit)}')
-                else:
-                    commArr.pop(0)
-                    out = [i for i in commArr if i != '']
-                    print(f'{' '.join(out)}')
-                    #' '.join([i for i in command if i != ''])
+                #print(commArr)
+                # Use shlex to split the command like a shell
+                args = shlex.split(command)
+                # Remove the 'echo' part
+                print(' '.join(args[1:]))
             elif (commArr[0] == 'type'):
                 match commArr[1]:
                     case "pwd":
